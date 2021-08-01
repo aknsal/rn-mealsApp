@@ -1,13 +1,14 @@
 import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components/native";
 import { Searchbar } from "react-native-paper";
+import { Text, View } from "react-native";
 
 import { LocationContext } from "../../../services/location/location.context";
 
-const SearchContainer = styled.View`
+const SearchContainer = styled(View)`
   padding: ${(props) => props.theme.space[3]};
   position: absolute;
-  z-index: 99;
+  z-index: 3;
   top: 25px;
   width: 100%;
 `;

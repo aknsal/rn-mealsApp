@@ -13,6 +13,7 @@ import { ActivityIndicator, Colors } from "react-native-paper";
 import RestaurantInfoCard from "../components/restaurant-info-card.component";
 import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
 import { Search } from "../components/search.component";
+import { FadeInView } from "../../../components/animations/fade.animation";
 import { FavouritesBar } from "../../../components/favourites/favourites-bar.component";
 import { FavouritesContext } from "../../../services/favourites/favourites.context";
 const SafeArea = styled(SafeAreaView)`
@@ -44,10 +45,12 @@ const RestaurantsScreen = ({ navigation }) => {
         onFavouritesToggle={() => setIsToggled(!isToggled)}
       />
       {isToggled && (
-        <FavouritesBar
-          favourites={favourites}
-          onNavigate={navigation.navigate}
-        />
+        <FadeInView>
+          <FavouritesBar
+            favourites={favourites}
+            onNavigate={navigation.navigate}
+          />
+        </FadeInView>
       )}
       {isLoading && (
         <LoadingContainer>
@@ -65,7 +68,9 @@ const RestaurantsScreen = ({ navigation }) => {
                 navigation.navigate("RestaurantDetails", { restaurant: item })
               }
             >
-              <RestaurantInfoCard restaurant={item} />
+              <FadeInView>
+                <RestaurantInfoCard restaurant={item} />
+              </FadeInView>
             </TouchableOpacity>
           );
         }}

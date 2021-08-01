@@ -1,48 +1,73 @@
-import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import React, { useContext } from "react";
+
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-import { Text } from "react-native";
+import { Text, Button } from "react-native";
 
 import { SafeArea } from "../../components/utility/safe-area.component";
 import { MapScreen } from "../../features/map/screens/map.screen";
 import { RestaurantsNavigator } from "./restaurants.navigator";
+import { AuthenticationContext } from "../../services/authentication/authentication.context";
+import { RestaurantsContextProvider } from "../../services/restaurants/restaurants.context";
+import { LocationContextProvider } from "../../services/location/location.context";
+import { FavouritesContextProvider } from "../../services/favourites/favourites.context";
+import { SettingsNavigator } from "./settings.navigator";
 
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
-const TAB_ICON = {
-  Restaurants: "md-restaurant",
-  Map: "md-map",
-  Settings: "md-settings",
-};
-
-const Settings = () => (
+const Map = () => (
   <SafeArea>
-    <Text>Settings</Text>
+    <Text>Maps</Text>
+  </SafeArea>
+);
+const Restaurant = () => (
+  <SafeArea>
+    <Text>Restaurant</Text>
   </SafeArea>
 );
 
-const createScreenOptions = ({ route }) => {
-  const iconName = TAB_ICON[route.name];
-  return {
-    tabBarIcon: ({ size, color }) => (
-      <Ionicons name={iconName} size={size} color={color} />
-    ),
-  };
-};
-
 export const AppNavigator = () => (
-  <NavigationContainer>
-    <Tab.Navigator
-      screenOptions={createScreenOptions}
-      tabBarOptions={{
-        activeTintColor: "tomato",
-        inactiveTintColor: "gray",
-      }}
-    >
-      <Tab.Screen name="Restaurants" component={RestaurantsNavigator} />
-      <Tab.Screen name="Map" component={MapScreen} />
-      <Tab.Screen name="Settings" component={Settings} />
-    </Tab.Navigator>
-  </NavigationContainer>
+  <FavouritesContextProvider>
+    <LocationContextProvider>
+      <RestaurantsContextProvider>
+        <Tab.Navigator
+          initialRouteName="Restaurants"
+          activeColor="#e91e63"
+          inactiveColor="#bababa"
+          barStyle={{ backgroundColor: "#fcfcfc" }}
+        >
+          <Tab.Screen
+            name="Restaurants"
+            component={RestaurantsNavigator}
+            options={{
+              tabBarLabel: "Home",
+              tabBarIcon: ({ color }) => (
+                <Ionicons name="md-restaurant" size={21} color={color} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Map"
+            component={MapScreen}
+            options={{
+              tabBarLabel: "Maps",
+              tabBarIcon: ({ color }) => (
+                <Ionicons name="md-map" size={21} color={color} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Settings"
+            component={SettingsNavigator}
+            options={{
+              tabBarLabel: "Settings",
+              tabBarIcon: ({ color }) => (
+                <Ionicons name="md-settings" size={21} color={color} />
+              ),
+            }}
+          />
+        </Tab.Navigator>
+      </RestaurantsContextProvider>
+    </LocationContextProvider>
+  </FavouritesContextProvider>
 );

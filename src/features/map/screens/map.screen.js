@@ -23,7 +23,6 @@ export const MapScreen = ({ navigation }) => {
 
   return (
     <>
-      <Search />
       <Map
         region={{
           latitude: lat,
@@ -53,6 +52,7 @@ export const MapScreen = ({ navigation }) => {
           );
         })}
       </Map>
+      <Search />
     </>
   );
 };

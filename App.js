@@ -1,5 +1,6 @@
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import firebase from "firebase/app";
 import { ThemeProvider } from "styled-components/native";
 import { theme } from "./src/infrastructure/theme/index";
 import RestaurantsScreen from "./src/features/restaurants/screens/restaurants.screen";
@@ -17,23 +18,21 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { restaurantsRequest } from "./src/services/restaurants/restaurants.services";
-import { RestaurantsContextProvider } from "./src/services/restaurants/restaurants.context";
-import { LocationContextProvider } from "./src/services/location/location.context";
+
 import { Navigation } from "./src/infrastructure/navigation/index";
-import { FavouritesContextProvider } from "./src/services/favourites/favourites.context";
-function SettingsScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Settings!</Text>
-    </View>
-  );
-}
-function MapScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Map!</Text>
-    </View>
-  );
+
+import { AuthenticationContextProvider } from "./src/services/authentication/authentication.context";
+const firebaseConfig = {
+  apiKey: "AIzaSyCBrG5tApToOsrQBdOlFcwhcv70gw6jDCU",
+  authDomain: "mealstogo-44d8f.firebaseapp.com",
+  projectId: "mealstogo-44d8f",
+  storageBucket: "mealstogo-44d8f.appspot.com",
+  messagingSenderId: "78487242037",
+  appId: "1:78487242037:web:62642f06cdda4d6d58387c",
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
 }
 
 export default function App() {
@@ -53,13 +52,9 @@ export default function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <FavouritesContextProvider>
-          <LocationContextProvider>
-            <RestaurantsContextProvider>
-              <Navigation />
-            </RestaurantsContextProvider>
-          </LocationContextProvider>
-        </FavouritesContextProvider>
+        <AuthenticationContextProvider>
+          <Navigation />
+        </AuthenticationContextProvider>
       </ThemeProvider>
       <ExpoStatusBar style="auto" />
     </>
